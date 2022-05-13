@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, json
 import jwt_utils as jwt
 
 app = Flask(__name__)
@@ -17,7 +17,7 @@ def login():
 	payload = request.get_json()
 	print(payload)
 	if payload['password'].strip() == 'wrong':
-		return jwt.build_token()
+		return json.jsonify(token=jwt.build_token())
 	else:
 		return '', 401
 	
