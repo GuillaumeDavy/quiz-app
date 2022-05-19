@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 from flask import Flask, request, json
 from utils import question_utils as qs, jwt_utils as jwt
 app = Flask(__name__)
@@ -15,7 +16,7 @@ def GetQuizInfo():
 @app.route('/login', methods=['POST'])
 def Login():
 	payload = request.get_json()
-	if payload['password'].strip() == 'Vive l\'ESIEE':
+	if payload['password'].strip() == 'Vive l\'ESIEE !':
 		print("password is correct")
 		return json.jsonify(token=jwt.build_token())
 	else:
@@ -24,16 +25,41 @@ def Login():
 @app.route('/questions', methods=['POST'])
 def PostQuestions():
 	token = request.headers.get('Authorization')
-	question_json = request.get_json()
+	if token:
+		token = token.split(' ')[1]
+	else:
+		return 'No token provided', 401
+	
+	if is_valid_token(token):
+		question_json = request.get_json()
+		qs.Post(question_json)
+		return 'Success', 200
+	else:
+		return 'Token is invalid', 401
 
-	# TODO PARSER DECODER FOR QUESTION OBJECT
-	qs.PostQuestion(question_json)
-	return '', 200
+@app.route('/questions/<position>', methods=['DELETE'])
+def DeleteQuestion(position):
+	token = request.headers.get('Authorization')
+	if token != None:
+		token.split(' ')[1]
+	else:
+		return 'No token provided', 401
 
-@app.route('/questions/<id>', methods=['DELETE'])
+	if is_valid_token(token):
+		qs.Delete(position)
+		return 'Success', 200
+	else:
+		return 'Token is invalid', 401
+
+@app.route('/questions/<position>', methods=['GET'])
+def GetQuestion(position):
+	#Maybe return in json format here
+	return qs.Get(position)
+
 
 def is_valid_token(token):
-	return token is None or jwt.decode_token(token)
+	return jwt.decode_token(token)
 
+		
 if __name__ == "__main__":
     app.run(ssl_context='adhoc')
