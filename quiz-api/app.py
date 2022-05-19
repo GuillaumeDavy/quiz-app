@@ -15,21 +15,22 @@ def GetQuizInfo():
 @app.route('/login', methods=['POST'])
 def Login():
 	payload = request.get_json()
-	print(payload)
-	if payload['password'].strip() == 'wrong':
+	if payload['password'].strip() == 'Vive l\'ESIEE':
+		print("password is correct")
 		return json.jsonify(token=jwt.build_token())
 	else:
-		return '', 401
+		return 'Wrong password', 401
 	
 @app.route('/questions', methods=['POST'])
 def PostQuestions():
 	token = request.headers.get('Authorization')
 	question_json = request.get_json()
-	if is_valid_token(token):
-		return '', 401
+
 	# TODO PARSER DECODER FOR QUESTION OBJECT
 	qs.PostQuestion(question_json)
 	return '', 200
+
+@app.route('/questions/<id>', methods=['DELETE'])
 
 def is_valid_token(token):
 	return token is None or jwt.decode_token(token)
