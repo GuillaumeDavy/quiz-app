@@ -53,9 +53,15 @@ def DeleteQuestion(position):
 
 @app.route('/questions/<position>', methods=['GET'])
 def GetQuestion(position):
-	#Maybe return in json format here
 	return qs.Get(position)
 
+@app.route('/questions/<position>', methods=['PUT'])
+def PutQuestion(position):
+	question_json = request.get_json()
+	if(qs.Put(position, question_json)):
+		return 'Success', 200
+	else:
+		return 'Failure', 400
 
 def is_valid_token(token):
 	return jwt.decode_token(token)

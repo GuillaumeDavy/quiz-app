@@ -15,6 +15,7 @@ def Delete(position):
     db_utils.deleteQuestion(position)
 
 def Get(position):
+    #TODO A faire en plus propre (title = db_utils.gestiosnzohfefh...)
     question = q.Question(db_utils.getQuestion(position)[0][2], db_utils.getQuestion(position)[0][1], db_utils.getQuestion(position)[0][0], db_utils.getQuestion(position)[0][3], [])
     
     answers = []
@@ -25,3 +26,12 @@ def Get(position):
     question.possibleAnswers = answers
     questionJSONData = json.dumps(question, indent=4, cls=q.QuestionEncoder)
     return json.loads(questionJSONData)
+
+def Put(position, question_json):
+    quest = q.Question(question_json['title'], question_json['text'], question_json['position'], question_json['image'], [] )
+    #Put des questions
+    ans.Put(question_json, position)
+
+    #Put des questions
+    return db_utils.PutQuestion(position, quest)
+    

@@ -3,6 +3,8 @@ import sqlite3
 import os
 from turtle import position
 
+from app import PutQuestion
+
 def connectdb():
     path = "../db-quiz.db"
     db_connection = sqlite3.connect(path)
@@ -27,9 +29,21 @@ def deleteQuestion(position):
     cur, db_connection = connectdb()
 
     #Requete de suppression de question en base de données
-    print("delete from question where position = " + position)
     deletion_result = cur.execute(
         f"delete from question where position = '{position}'")
+
+    #Exécution de la requete
+    execdb(db_connection)
+
+    closeCursor(cur, db_connection)
+
+def deleteAnswer(position):
+    #Connexion à la base de données
+    cur, db_connection = connectdb()
+
+    #Requete de suppression de question en base de données
+    deletion_result = cur.execute(
+        f"delete from answer where question_position = '{position}'")
 
     #Exécution de la requete
     execdb(db_connection)
@@ -75,6 +89,32 @@ def getQuestion(position):
     closeCursor(cur, db_connection)
     return response
 
+def PutQuestion(position_id, questionObject):
+	#Connexion à la base de données
+	cur, db_connection = connectdb()
+
+	#Formatage des valeurs
+	title = questionObject.title.replace("'", "\'")
+	text = questionObject.text.replace("'", "\'")
+	position = questionObject.position
+	image = questionObject.image.replace("'", "\'")
+
+	#Requete de modification des questions en base de données
+	update_result = cur.execute(
+        f'update question SET position = "{position}", text = "{text}", title = "{title}", image = "{image}" where position = "{position_id}"'
+	)
+
+	#Exécution de la requete
+	execdb(db_connection)
+
+	closeCursor(cur, db_connection)
+	return True
+
+def PutAnswer(answerObject):
+	#Question sont supprimés avant l'ajout en base
+	insertAnswer(answerObject)
+	
+	
 def getAnswer(position):
     #Connexion à la base de données
     cur, db_connection = connectdb()
