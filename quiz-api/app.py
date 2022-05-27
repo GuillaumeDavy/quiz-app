@@ -41,27 +41,33 @@ def PostQuestions():
 def DeleteQuestion(position):
 	token = request.headers.get('Authorization')
 	if token != None:
-		token.split(' ')[1]
+		token = token.split(' ')[1]
 	else:
 		return 'No token provided', 401
 
 	if is_valid_token(token):
-		qs.Delete(position)
-		return 'Success', 200
+		if qs.Delete(position):
+			return 'Success', 204
+		else:
+			return 'Question not found', 404
 	else:
-		return 'Token is invalid', 401
+		return 'Token is invalid', 402
 
 @app.route('/questions/<position>', methods=['GET'])
 def GetQuestion(position):
-	return qs.Get(position)
+	if qs.Get(position):
+		return 'GetQuestion Ok', 200
+	else:
+		return 'Question not found', 404
+
 
 @app.route('/questions/<position>', methods=['PUT'])
 def PutQuestion(position):
 	question_json = request.get_json()
-	if(qs.Put(position, question_json)):
+	if qs.Put(position, question_json):
 		return 'Success', 200
 	else:
-		return 'Failure', 400
+		return 'Question not found', 404
 
 def is_valid_token(token):
 	return jwt.decode_token(token)

@@ -76,7 +76,7 @@ def getQuestion(position):
     cur, db_connection = connectdb()
 
     #Requete de récupération des questions en base de données
-    question = cur.execute("select * from question where position =" + position)
+    question = cur.execute("select * from question where position =" + str(position))
 
     
     #Exécution de la requete
@@ -120,7 +120,7 @@ def getAnswer(position):
     cur, db_connection = connectdb()
 
     #Requete de récupération des questions en base de données
-    question = cur.execute("select * from answer where question_position =" + position)
+    question = cur.execute("select * from answer where question_position =" + str(position))
 
     
     #Exécution de la requete
@@ -128,7 +128,6 @@ def getAnswer(position):
 
     response = question.fetchall()
 
-    print(response)
 
     closeCursor(cur, db_connection)
     return response

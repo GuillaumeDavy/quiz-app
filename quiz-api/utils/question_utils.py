@@ -1,5 +1,6 @@
 from contextlib import nullcontext
 import json
+from queue import Empty
 from types import SimpleNamespace
 from model import question as q
 from model import answer as a
@@ -12,26 +13,59 @@ def Post(question_json):
     ans.Post(question_json)
     
 def Delete(position):
+    # check is quest is empty
+    if not checkQuestionPosition(position):
+        return False
+
     db_utils.deleteQuestion(position)
+    db_utils.deleteAnswer(position)
+    
+    return True
+
+def checkQuestionPosition(position):
+    quest = db_utils.getQuestion(position)
+    # check is quest is empty
+    if not quest:
+        return False
+    return True
 
 def Get(position):
-    #TODO A faire en plus propre (title = db_utils.gestiosnzohfefh...)
-    question = q.Question(db_utils.getQuestion(position)[0][2], db_utils.getQuestion(position)[0][1], db_utils.getQuestion(position)[0][0], db_utils.getQuestion(position)[0][3], [])
+    quest = db_utils.getQuestion(position)
+    # check is quest is empty
+    if not checkQuestionPosition(position):
+        return False
+
+    title = quest[0][2]
+    text = quest[0][1]
+    position = quest[0][0]
+    image = quest[0][3]
+
+    question = q.Question(title, text, position, image, [])
     
     answers = []
+    ans = db_utils.getAnswer(position)
+
     #Je boucle sur le nombre de résultats de la fonction getanswer
     for i in range(len(db_utils.getAnswer(position))):
-        answers.append(a.Answer(True if db_utils.getAnswer(position)[i][2] == "True" else False, db_utils.getAnswer(position)[i][1], db_utils.getAnswer(position)[i][3]))
+
+        isCorrect = ans[i][2]
+        text = ans[i][1]
+        question = ans[i][3]
+
+        answers.append(a.Answer(True if isCorrect == "True" else False, text, question))
     
     question.possibleAnswers = answers
     questionJSONData = json.dumps(question, indent=4, cls=q.QuestionEncoder)
     return json.loads(questionJSONData)
 
 def Put(position, question_json):
+    if not checkQuestionPosition(position):
+        return False
+        
     quest = q.Question(question_json['title'], question_json['text'], question_json['position'], question_json['image'], [] )
     #Put des questions
     ans.Put(question_json, position)
 
     #Put des questions
-    return db_utils.PutQuestion(position, quest)
-    
+    db_utils.PutQuestion(position, quest)
+    return True
