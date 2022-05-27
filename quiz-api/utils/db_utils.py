@@ -12,12 +12,13 @@ def connectdb():
     cur.execute("begin")
     return cur, db_connection
 
-def execdb(db, cur):
+def execdb(db):
     #send the request
     db.commit()
-
-    #in case of exception, roolback the transaction
     db.rollback()
+
+def closeCursor(cur, db):
+    #in case of exception, roolback the transaction
     cur.close()
     db.close()
 
@@ -31,7 +32,9 @@ def deleteQuestion(position):
         f"delete from question where position = '{position}'")
 
     #Exécution de la requete
-    execdb(db_connection, cur)
+    execdb(db_connection)
+
+    closeCursor(cur, db_connection)
 
 
 def insertQuestion(input_question):
@@ -50,21 +53,62 @@ def insertQuestion(input_question):
         f'("{position}", "{text}", "{title}", "{image}")')
 
     #Exécution de la requete
-    execdb(db_connection, cur)
+    execdb(db_connection)
+
+    closeCursor(cur, db_connection)
+
+def getQuestion(position):
+    #Connexion à la base de données
+    cur, db_connection = connectdb()
+
+    #Requete de récupération des questions en base de données
+    question = cur.execute("select * from question where position =" + position)
+
+    
+    #Exécution de la requete
+    execdb(db_connection)
+
+    response = question.fetchall()
+
+    print(response)
+
+    closeCursor(cur, db_connection)
+    return response
+
+def getAnswer(position):
+    #Connexion à la base de données
+    cur, db_connection = connectdb()
+
+    #Requete de récupération des questions en base de données
+    question = cur.execute("select * from answer where question_position =" + position)
+
+    
+    #Exécution de la requete
+    execdb(db_connection)
+
+    response = question.fetchall()
+
+    print(response)
+
+    closeCursor(cur, db_connection)
+    return response
+
 
 def insertAnswer(answerObject):
     #Connexion à la base de données
     cur, db_connection = connectdb()
 
     #Formatage des valeurs
-    is_correct = answerObject.is_correct
+    isCorrect = answerObject.isCorrect
     text = answerObject.text.replace("'", "\'")
     question_position = answerObject.question
 
     #Requete d'insertion de question en base de données
     insertion_result = cur.execute(
         f"insert into answer (is_correct, text, question_position) values"
-        f'("{is_correct}", "{text}", "{question_position}")')
+        f'("{isCorrect}", "{text}", "{question_position}")')
 
     #Exécution de la requete
-    execdb(db_connection, cur)
+    execdb(db_connection)
+
+    closeCursor(cur, db_connection)
