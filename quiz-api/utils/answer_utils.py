@@ -17,6 +17,8 @@ def Get():
 def Put(question_json, position=0):
     #Delete des questions avant la réinsertion <-- mieux de le mettre dans db_utils 
     pos = position if position != 0 else question_json['position']
+
+
     db_utils.deleteAnswer(pos)
 
     #Réinsertion

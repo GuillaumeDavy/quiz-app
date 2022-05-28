@@ -64,7 +64,8 @@ def Put(position, question_json):
 		return False
 		
 	quest = q.Question(question_json['title'], question_json['text'], question_json['position'], question_json['image'], [] )
-	#Put des questions
+	
+	#Put des Answers
 	ans.Put(question_json, position)
 
 	#Put des questions

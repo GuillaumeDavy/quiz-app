@@ -38,44 +38,70 @@ def deleteQuestion(position):
     closeCursor(cur, db_connection)
 
 def deleteAnswer(position):
+
     #Connexion à la base de données
-    cur, db_connection = connectdb()
+	cur, db_connection = connectdb()
 
     #Requete de suppression de question en base de données
-    deletion_result = cur.execute(
+	deletion_result = cur.execute(
         f"delete from answer where question_position = '{position}'")
 
     #Exécution de la requete
-    execdb(db_connection)
+	execdb(db_connection)
 
-    closeCursor(cur, db_connection)
+	closeCursor(cur, db_connection)
 
-def incrementQuestion(position):
+def incrementQuestionLessThanPosition(position):
     #Connexion à la base de données
     cur, db_connection = connectdb()
 
     #Requete de modification des questions en base de données
     increment_question = cur.execute(
-        f"update question set position = position + 1 where position >= {position}")
+        f"update question set position = position + 1 where position < {position}")
 
     #Exécution de la requete
     execdb(db_connection)
 
     closeCursor(cur, db_connection)
 
-def incrementAnswer(position):
+def decrementQuestion(position):
+    #Connexion à la base de données
+    cur, db_connection = connectdb()
+
+    #Requete de modification des questions en base de données
+    increment_question = cur.execute(
+        f"update question set position = position - 1 where position >= {position}")
+
+    #Exécution de la requete
+    execdb(db_connection)
+
+    closeCursor(cur, db_connection)
+
+def incrementAnswerLessThanPosition(position):
     #Connexion à la base de données
     cur, db_connection = connectdb()
 
     #Requete de modification des questions en base de données
     increment_answer = cur.execute(
-        f"update answer set question_position = question_position + 1 where question_position >= {position}")
+        f"update answer set question_position = question_position + 1 where question_position < {position}")
 
     #Exécution de la requete
     execdb(db_connection)
 
     closeCursor(cur, db_connection)
 
+def decrementAnswer(position):
+    #Connexion à la base de données
+    cur, db_connection = connectdb()
+
+    #Requete de modification des questions en base de données
+    increment_answer = cur.execute(
+        f"update answer set question_position = question_position - 1 where question_position >= {position}")
+
+    #Exécution de la requete
+    execdb(db_connection)
+
+    closeCursor(cur, db_connection)
     
 
 def insertQuestion(input_question):
@@ -105,12 +131,38 @@ def insertQuestion(input_question):
 
 	closeCursor(cur, db_connection)
 
+def incrementQuestion(position):
+    #Connexion à la base de données
+    cur, db_connection = connectdb()
+
+    #Requete de modification des questions en base de données
+    increment_question = cur.execute(
+        f"update question set position = position + 1 where position >= {position}")
+
+    #Exécution de la requete
+    execdb(db_connection)
+
+    closeCursor(cur, db_connection)
+
+def incrementAnswer(position):
+    #Connexion à la base de données
+    cur, db_connection = connectdb()
+
+    #Requete de modification des questions en base de données
+    increment_answer = cur.execute(
+        f"update answer set question_position = question_position + 1 where question_position >= {position}")
+
+    #Exécution de la requete
+    execdb(db_connection)
+
+    closeCursor(cur, db_connection)
+
 def getQuestion(position):
     #Connexion à la base de données
     cur, db_connection = connectdb()
 
     #Requete de récupération des questions en base de données
-    question = cur.execute("select * from question where position =" + str(position))
+    question = cur.execute("select position, text, title, image from question where position =" + str(position))
 
     
     #Exécution de la requete
@@ -121,6 +173,44 @@ def getQuestion(position):
     return response
 
 def PutQuestion(position_id, questionObject):
+
+	currentPosition = getQuestion(position_id)
+	
+	if(int(position_id) > questionObject.position):
+		#J'incrémente les questions inférieures à celle que je déplace
+		incrementQuestionLessThanPosition(position_id)
+		#J'incrémente les réponses inférieures à celle que je déplace
+		incrementAnswerLessThanPosition(position_id)
+		
+		updatePositionQuestion(position_id, questionObject)
+	elif(int(position_id) < questionObject.position):
+		#Je decrement celles qui sont supérieurs à celle que je déplace
+		decrementQuestion(questionObject.position)
+		decrementAnswer(questionObject.position)
+	elif(int(position_id) == questionObject.position):
+		return updateCompleteQuestion(position_id, questionObject)
+
+def updatePositionQuestion(position_id, questionObject):
+	#Connexion à la base de données
+	cur, db_connection = connectdb()
+
+	#Formatage des valeurs
+	title = questionObject.title.replace("'", "\'")
+	text = questionObject.text.replace("'", "\'")
+	position = questionObject.position
+	image = questionObject.image.replace("'", "\'")
+
+
+	#Requete de modification des questions en base de données
+	update_question = cur.execute(
+		f"update question set position = {position} where position = {position_id} AND title = '{title}' AND text = '{text}'")
+
+	#Exécution de la requete
+	execdb(db_connection)
+
+	closeCursor(cur, db_connection)
+
+def updateCompleteQuestion(position_id, questionObject):
 	#Connexion à la base de données
 	cur, db_connection = connectdb()
 
@@ -132,7 +222,7 @@ def PutQuestion(position_id, questionObject):
 
 	#Requete de modification des questions en base de données
 	update_result = cur.execute(
-        f'update question SET position = "{position}", text = "{text}", title = "{title}", image = "{image}" where position = "{position_id}"'
+		f'update question SET position = "{position}", text = "{text}", title = "{title}", image = "{image}" where position = "{position_id}"'
 	)
 
 	#Exécution de la requete
