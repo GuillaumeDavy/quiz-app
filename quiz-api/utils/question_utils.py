@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 from contextlib import nullcontext
 import json
 from queue import Empty
@@ -35,12 +36,7 @@ def Get(position):
     if not checkQuestionPosition(position):
         return False
 
-    title = quest[0][2]
-    text = quest[0][1]
-    position = quest[0][0]
-    image = quest[0][3]
-
-    question = q.Question(title, text, position, image, [])
+   
     
     answers = []
     ans = db_utils.getAnswer(position)
@@ -54,7 +50,12 @@ def Get(position):
 
         answers.append(a.Answer(True if isCorrect == "True" else False, text, question))
     
-    question.possibleAnswers = answers
+    title = quest[0][2]
+    text = quest[0][1]
+    position = quest[0][0]
+    image = quest[0][3]
+
+    question = q.Question(title, text, position, image, answers)
     questionJSONData = json.dumps(question, indent=4, cls=q.QuestionEncoder)
     return json.loads(questionJSONData)
 

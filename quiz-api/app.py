@@ -56,7 +56,7 @@ def DeleteQuestion(position):
 @app.route('/questions/<position>', methods=['GET'])
 def GetQuestion(position):
 	if qs.Get(position):
-		return 'GetQuestion Ok', 200
+		return qs.Get(position), 200
 	else:
 		return 'Question not found', 404
 
