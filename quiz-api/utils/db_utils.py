@@ -50,26 +50,60 @@ def deleteAnswer(position):
 
     closeCursor(cur, db_connection)
 
-
-def insertQuestion(input_question):
+def incrementQuestion(position):
     #Connexion à la base de données
     cur, db_connection = connectdb()
 
-    #Formatage des valeurs
-    title = input_question.title.replace("'", "\'")
-    text = input_question.text.replace("'", "\'")
-    position = input_question.position
-    image = input_question.image.replace("'", "\'")
-
-    #Requete d'insertion de question en base de données
-    insertion_result = cur.execute(
-        f"insert into question (position, text, title, image) values"
-        f'("{position}", "{text}", "{title}", "{image}")')
+    #Requete de modification des questions en base de données
+    increment_question = cur.execute(
+        f"update question set position = position + 1 where position >= {position}")
 
     #Exécution de la requete
     execdb(db_connection)
 
     closeCursor(cur, db_connection)
+
+def incrementAnswer(position):
+    #Connexion à la base de données
+    cur, db_connection = connectdb()
+
+    #Requete de modification des questions en base de données
+    increment_answer = cur.execute(
+        f"update answer set question_position = question_position + 1 where question_position >= {position}")
+
+    #Exécution de la requete
+    execdb(db_connection)
+
+    closeCursor(cur, db_connection)
+
+    
+
+def insertQuestion(input_question):
+	previousQuestion = getQuestion(input_question.position)
+	if len(previousQuestion) > 0:
+		previousQuestionPosition = previousQuestion[0][0]
+		print(previousQuestionPosition)
+		incrementAnswer(previousQuestionPosition)
+		incrementQuestion(previousQuestionPosition)
+
+	#Connexion à la base de données
+	cur, db_connection = connectdb()
+
+	#Formatage des valeurs
+	title = input_question.title.replace("'", "\'")
+	text = input_question.text.replace("'", "\'")
+	position = input_question.position
+	image = input_question.image.replace("'", "\'")
+
+	#Requete d'insertion de question en base de données
+	insertion_result = cur.execute(
+		f"insert into question (position, text, title, image) values"
+		f'("{position}", "{text}", "{title}", "{image}")')
+
+	#Exécution de la requete
+	execdb(db_connection)
+
+	closeCursor(cur, db_connection)
 
 def getQuestion(position):
     #Connexion à la base de données
@@ -83,9 +117,6 @@ def getQuestion(position):
     execdb(db_connection)
 
     response = question.fetchall()
-
-    print(response)
-
     closeCursor(cur, db_connection)
     return response
 
