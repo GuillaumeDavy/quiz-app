@@ -1,16 +1,12 @@
 from asyncio.windows_events import NULL
 from flask import Flask, request, json
-from utils import question_utils as qs, jwt_utils as jwt
+from utils import question_utils as qs, participant_utils as pa, jwt_utils as jwt
 app = Flask(__name__)
 
 @app.route('/')
 def hello_world():
 	x = 'world'
 	return f"Hello, {x}"
-
-@app.route('/quiz-info', methods=['GET'])
-def GetQuizInfo():
-	return {"size": 0, "scores": []}, 200
 
 
 @app.route('/login', methods=['POST'])
@@ -69,10 +65,52 @@ def PutQuestion(position):
 	else:
 		return 'Question not found', 404
 
-# TODO https://equable-dresser-d83.notion.site/Submit-player-s-quiz-answers-POST-answers-36d0aa0779a342b48aec58ced1480b8d
-# Créer en base de doonnées une table qui contient les infos des joueurs
-# Créer une classe qui contient les infos des joueurs
-# A détailler...
+@app.route('/participations', methods=['POST'])
+def PostParticipations():
+	token = request.headers.get('Authorization')
+	if token:
+		token = token.split(' ')[1]
+	else:
+		return 'No token provided', 401
+	
+	if is_valid_token(token):
+		participant_json = request.get_json()
+		if pa.Post(participant_json):
+			return 'Success', 200 
+		else:
+			return 'Participation error', 409
+	else:
+		return 'Token is invalid', 401
+
+@app.route('/participations', methods=['DELETE'])
+def DeleteParticipations():
+	token = request.headers.get('Authorization')
+	if token:
+		token = token.split(' ')[1]
+	else:
+		return 'No token provided', 401
+	
+	if is_valid_token(token):
+		if pa.Delete():
+			return 'Success', 200 
+		else:
+			return 'Delete error', 409
+	else:
+		return 'Token is invalid', 401
+
+
+@app.route('/quiz-info', methods=['GET'])
+def GetQuizInfo():
+	token = request.headers.get('Authorization')
+	if token:
+		token = token.split(' ')[1]
+	else:
+		return 'No token provided', 401
+	
+	if is_valid_token(token):
+		return pa.Get(), 200
+	else:
+		return 'Token is invalid', 401
 
 def is_valid_token(token):
 	return jwt.decode_token(token)

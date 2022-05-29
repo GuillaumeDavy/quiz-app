@@ -220,7 +220,7 @@ def PutQuestion(position_id, questionObject):
 		#Je place la question et les réponses au bon emplacement
 		updatePositionQuestion(0, questionObject)
 		updatePositionAnswer(0, questionObject)
-		
+
 	#Si je déplace la question vers le bas
 	elif(int(position_id) < questionObject.position):
 		#Je met à 0 la question et les answers que je souhaite déplacer
@@ -365,3 +365,98 @@ def insertAnswer(answerObject):
     execdb(db_connection)
 
     closeCursor(cur, db_connection)
+
+def insertParticipant(participantObject):
+	#Connexion à la base de données
+	cur, db_connection = connectdb()
+
+	#Formatage des valeurs
+	name = participantObject.playerName.replace("'", "\'")
+
+	#Requete d'insertion de question en base de données
+	cur.execute(
+		f"insert into participant (name) values"
+		f'("{name}")')
+
+	#Exécution de la requete
+	execdb(db_connection)
+
+	closeCursor(cur, db_connection)
+
+def getLastParticipant():
+	#Connexion à la base de données
+	cur, db_connection = connectdb()
+
+	#Requete de récupération des questions en base de données
+	question = cur.execute("select * from participant order by id desc limit 1")
+
+	#Exécution de la requete
+	execdb(db_connection)
+
+	response = question.fetchall()
+
+	closeCursor(cur, db_connection)
+	return response
+
+def getAllParticipants():
+	#Connexion à la base de données
+	cur, db_connection = connectdb()
+
+	#Requete de récupération des questions en base de données
+	question = cur.execute("select * from participant ")
+
+	#Exécution de la requete
+	execdb(db_connection)
+
+	response = question.fetchall()
+
+	closeCursor(cur, db_connection)
+	return response
+
+def getParticipantAnswers(participantId):
+	#Connexion à la base de données
+	cur, db_connection = connectdb()
+
+	#Requete de récupération des questions en base de données
+	question = cur.execute("select * from participant_answers where id_participant = " + str(participantId))
+
+	#Exécution de la requete
+	execdb(db_connection)
+
+	response = question.fetchall()
+
+	closeCursor(cur, db_connection)
+	return response
+
+def insertParticipantAnswer(participantId, answerPosition):
+
+	#Connexion à la base de données
+	cur, db_connection = connectdb()
+
+	#Requete d'insertion de question en base de données
+	cur.execute(
+		f"insert into participant_answers (id_participant, answer) values"
+		f'("{participantId}", "{answerPosition}")')
+
+	#Exécution de la requete
+	execdb(db_connection)
+
+	closeCursor(cur, db_connection)
+
+
+def deleteAllParticipantsAndAnswers():
+	#Connexion à la base de données
+	cur, db_connection = connectdb()
+
+	#Requete de suppression de question en base de données
+	cur.execute(
+		f"delete from participant "
+	)
+	cur.execute(
+		f"delete from participant_answers "
+	)
+
+	#Exécution de la requete
+	execdb(db_connection)
+
+	closeCursor(cur, db_connection)
