@@ -202,6 +202,21 @@ def getQuestion(position):
     closeCursor(cur, db_connection)
     return response
 
+def countQuestions():
+	#Connexion à la base de données
+	cur, db_connection = connectdb()
+
+	#Requete de récupération des questions en base de données
+	question = cur.execute("select count(*) from question")
+
+	
+	#Exécution de la requete
+	execdb(db_connection)
+
+	response = question.fetchall()
+	closeCursor(cur, db_connection)
+	return response
+
 def PutQuestion(position_id, questionObject):
 
 	currentPosition = getQuestion(position_id)
@@ -413,12 +428,27 @@ def getAllParticipants():
 	closeCursor(cur, db_connection)
 	return response
 
-def getParticipantAnswers(participantId):
+def getParticipantAnswersById(participantId):
 	#Connexion à la base de données
 	cur, db_connection = connectdb()
 
 	#Requete de récupération des questions en base de données
 	question = cur.execute("select * from participant_answers where id_participant = " + str(participantId))
+
+	#Exécution de la requete
+	execdb(db_connection)
+
+	response = question.fetchall()
+
+	closeCursor(cur, db_connection)
+	return response
+
+def getIdParticipantByName(participantName):
+	#Connexion à la base de données
+	cur, db_connection = connectdb()
+
+	#Requete de récupération des questions en base de données
+	question = cur.execute(f"select id from participant where name = '{participantName}'")
 
 	#Exécution de la requete
 	execdb(db_connection)

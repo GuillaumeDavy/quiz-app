@@ -67,20 +67,15 @@ def PutQuestion(position):
 
 @app.route('/participations', methods=['POST'])
 def PostParticipations():
-	token = request.headers.get('Authorization')
-	if token:
-		token = token.split(' ')[1]
-	else:
-		return 'No token provided', 401
-	
-	if is_valid_token(token):
-		participant_json = request.get_json()
-		if pa.Post(participant_json):
-			return 'Success', 200 
-		else:
-			return 'Participation error', 409
-	else:
-		return 'Token is invalid', 401
+	participant_json = request.get_json()
+	returnValue = pa.Post(participant_json)
+	if returnValue == 200:
+		return pa.GetParticipant(participant_json), 200 
+	elif returnValue == 405:
+		return 'Pas assez de réponses', 400
+	elif returnValue == 406:
+		return 'Trop de réponses', 400
+
 
 @app.route('/participations', methods=['DELETE'])
 def DeleteParticipations():
@@ -92,7 +87,7 @@ def DeleteParticipations():
 	
 	if is_valid_token(token):
 		if pa.Delete():
-			return 'Success', 200 
+			return 'Success', 204
 		else:
 			return 'Delete error', 409
 	else:
@@ -101,17 +96,8 @@ def DeleteParticipations():
 
 @app.route('/quiz-info', methods=['GET'])
 def GetQuizInfo():
-	token = request.headers.get('Authorization')
-	if token:
-		token = token.split(' ')[1]
-	else:
-		return 'No token provided', 401
+	return pa.Get(), 200
 	
-	if is_valid_token(token):
-		return pa.Get(), 200
-	else:
-		return 'Token is invalid', 401
-
 def is_valid_token(token):
 	return jwt.decode_token(token)
 
