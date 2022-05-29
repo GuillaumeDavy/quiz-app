@@ -40,6 +40,7 @@ def Get():
 
 
 
+
 	return json.dumps(quizInfo, indent=4, cls=qi.quizInfoEncoder)
 
 def takeSecond(elem):
