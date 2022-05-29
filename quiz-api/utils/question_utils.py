@@ -62,12 +62,15 @@ def Get(position):
 def Put(position, question_json):
 	if not checkQuestionPosition(position):
 		return False
-		
-	quest = q.Question(question_json['title'], question_json['text'], question_json['position'], question_json['image'], [] )
 	
-	#Put des Answers
-	ans.Put(question_json, position)
+
+	quest = q.Question(question_json['title'], question_json['text'], question_json['position'], question_json['image'], [])
 
 	#Put des questions
 	db_utils.PutQuestion(position, quest)
+	
+	if(int(position) == int(question_json["position"]))
+		#Put des Answers
+		ans.Put(question_json, position)
+
 	return True
