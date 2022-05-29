@@ -69,7 +69,7 @@ def Put(position, question_json):
 	#Put des questions
 	db_utils.PutQuestion(position, quest)
 	
-	if(int(position) == int(question_json["position"]))
+	if(int(position) == int(question_json["position"])):
 		#Put des Answers
 		ans.Put(question_json, position)
 
