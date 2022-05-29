@@ -205,7 +205,7 @@ def getQuestion(position):
 def PutQuestion(position_id, questionObject):
 
 	currentPosition = getQuestion(position_id)
-	
+	# Si je déplace la question vers le haut
 	if(int(position_id) > questionObject.position):
 		#Je met à 0 la question et les answers que je souhaite déplacer
 		updatePositionQuestionTo0(position_id)
@@ -220,6 +220,8 @@ def PutQuestion(position_id, questionObject):
 		#Je place la question et les réponses au bon emplacement
 		updatePositionQuestion(0, questionObject)
 		updatePositionAnswer(0, questionObject)
+		
+	#Si je déplace la question vers le bas
 	elif(int(position_id) < questionObject.position):
 		#Je met à 0 la question et les answers que je souhaite déplacer
 		updatePositionQuestionTo0(position_id)
@@ -234,6 +236,7 @@ def PutQuestion(position_id, questionObject):
 		#Je place la question et les réponses au bon emplacement
 		updatePositionQuestion(0, questionObject)
 		updatePositionAnswer(0, questionObject)
+	#Si je ne déplace pas la question
 	elif(int(position_id) == questionObject.position):
 		return updateCompleteQuestion(position_id, questionObject)
 

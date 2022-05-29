@@ -69,6 +69,11 @@ def PutQuestion(position):
 	else:
 		return 'Question not found', 404
 
+# TODO https://equable-dresser-d83.notion.site/Submit-player-s-quiz-answers-POST-answers-36d0aa0779a342b48aec58ced1480b8d
+# Créer en base de doonnées une table qui contient les infos des joueurs
+# Créer une classe qui contient les infos des joueurs
+# A détailler...
+
 def is_valid_token(token):
 	return jwt.decode_token(token)
 
