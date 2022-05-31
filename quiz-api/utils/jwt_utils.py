@@ -47,6 +47,25 @@ def decode_token(auth_token):
         # if decoding did not fail, this means we are correctly logged in
         return payload['sub']
     except jwt.ExpiredSignatureError:
+        return False
         raise JwtError('Signature expired. Please log in again.')
     except jwt.InvalidTokenError as e:
+        return False
+        raise JwtError('Invalid token. Please log in again.')
+
+def isTokenValid(auth_token):
+    """
+    Decodes the auth token
+    :param auth_token:
+    :return: integer|string
+    """
+    try:
+        payload = jwt.decode(auth_token, secret, algorithms="HS256")
+        # if decoding did not fail, this means we are correctly logged in
+        return True
+    except jwt.ExpiredSignatureError:
+        return False
+        raise JwtError('Signature expired. Please log in again.')
+    except jwt.InvalidTokenError as e:
+        return False
         raise JwtError('Invalid token. Please log in again.')
