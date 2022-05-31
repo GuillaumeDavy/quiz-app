@@ -1,1 +1,5 @@
 venv
+utils/__pycache__
+model/__pycache__
+__pycache__
+./db-quiz.db
