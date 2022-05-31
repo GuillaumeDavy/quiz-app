@@ -1,7 +1,9 @@
 from asyncio.windows_events import NULL
 from flask import Flask, request, json
+from flask_cors import CORS
 from utils import question_utils as qs, participant_utils as pa, jwt_utils as jwt
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/')
 def hello_world():
