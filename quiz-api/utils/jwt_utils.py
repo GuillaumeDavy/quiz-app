@@ -35,7 +35,6 @@ def build_token():
     except Exception as e:
         return e
 
-
 def decode_token(auth_token):
     """
     Decodes the auth token
@@ -47,10 +46,8 @@ def decode_token(auth_token):
         # if decoding did not fail, this means we are correctly logged in
         return payload['sub']
     except jwt.ExpiredSignatureError:
-        return False
         raise JwtError('Signature expired. Please log in again.')
     except jwt.InvalidTokenError as e:
-        return False
         raise JwtError('Invalid token. Please log in again.')
 
 def isTokenValid(auth_token):
@@ -65,7 +62,5 @@ def isTokenValid(auth_token):
         return True
     except jwt.ExpiredSignatureError:
         return False
-        raise JwtError('Signature expired. Please log in again.')
     except jwt.InvalidTokenError as e:
         return False
-        raise JwtError('Invalid token. Please log in again.')

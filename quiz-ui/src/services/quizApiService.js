@@ -1,4 +1,5 @@
 import axios from "axios";
+import localStorageService from "./LocalStorageService";
 
 const instance = axios.create({
     baseURL: `${import.meta.env.VITE_API_URL}`,
@@ -24,7 +25,7 @@ export default {
                 return { status: response.status, data: response.data };
             })
             .catch((error) => {
-                console.error(error);
+                return { status: error.response.status, data: error.response.data };
             });
     },
     getQuizInfo() {
@@ -32,5 +33,22 @@ export default {
     },
     getQuestion(position) {
         return this.call("get", `questions/${position}`);
+    },
+    submitParticipation(playerName, answers) {
+        return this.call("post", `participations`, {
+            playerName: playerName,
+            answers: answers
+        });
+    },
+    login(password) {
+        return this.call("post", "login", {
+            password: password
+        });
+    },
+    isValidToken(token) {
+        console.log(token)
+        return this.call("post", `check-token`, {
+            token: token
+        });
     }
 };

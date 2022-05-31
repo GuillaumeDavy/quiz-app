@@ -1,7 +1,11 @@
 <template>
+  {{ question.text }}
   <img v-if="question.image" :src="question.image" />
-  {{ question.position }}
-  <a @click="$emit('answer-selected', 2)">La réponse D</a>
+ 
+  <div v-for="(answer, index) in question.possibleAnswers">
+    <button @click="$emit('answer-selected', index+1)">{{ answer.text }}</button>
+  </div>
+  
 </template>
 
 <script>

@@ -100,7 +100,7 @@ def DeleteParticipations():
 def GetQuizInfo():
 	return pa.Get(), 200
 	
-@app.route('/check-token', methods=['GET'])
+@app.route('/check-token', methods=['POST'])
 def CheckToken():
 	token = request.get_json()
 	return "1" if check_token_validity(token["token"]) else "0", 200

@@ -19,5 +19,11 @@ export default {
     },
     getQuestionSize() {
         return window.localStorage.getItem("questionSize");
+    },
+    saveToken(token) {
+        window.localStorage.setItem("token", token);
+    },
+    getToken() {
+        return window.localStorage.getItem("token");
     }
 };
