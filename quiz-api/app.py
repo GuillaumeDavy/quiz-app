@@ -103,7 +103,7 @@ def GetQuizInfo():
 @app.route('/check-token', methods=['GET'])
 def CheckToken():
 	token = request.get_json()
-	return is_valid_token(token["token"]), 200
+	return "1" if is_valid_token(token["token"]) else "0", 200
 	
 def is_valid_token(token):
 	return jwt.decode_token(token)
