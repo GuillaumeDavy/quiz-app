@@ -34,6 +34,9 @@ export default {
     getQuestion(position) {
         return this.call("get", `questions/${position}`);
     },
+    getQuestions() {
+        return this.call("get", "questions");
+    },
     submitParticipation(playerName, answers) {
         return this.call("post", `participations`, {
             playerName: playerName,

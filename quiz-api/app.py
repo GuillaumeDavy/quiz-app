@@ -58,6 +58,13 @@ def GetQuestion(position):
 	else:
 		return 'Question not found', 404
 
+@app.route('/questions', methods=['GET'])
+def GetQuestions():
+	if qs.GetAll():
+		return qs.GetAll(), 200
+	else:
+		return 'Questions not found', 404
+
 
 @app.route('/questions/<position>', methods=['PUT'])
 def PutQuestion(position):
