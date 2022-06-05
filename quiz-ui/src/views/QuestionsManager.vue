@@ -1,6 +1,10 @@
 <template>
-  <h1>Question {{ currentQuestionPosition }} / {{ totalNumberOfQuestion }}</h1>
-  <QuestionDisplay :question="currentQuestion" @answer-selected="answerClickedHandler" />
+  <div class="container-bg container mt-5">
+    <div class="center text-center">
+      <h1>Question {{ currentQuestionPosition }} / {{ totalNumberOfQuestion }}</h1>
+      <QuestionDisplay :question="currentQuestion" @answer-selected="answerClickedHandler" />
+    </div>
+  </div>
 </template>
 
 <script>
