@@ -217,8 +217,7 @@ def countQuestions():
 	closeCursor(cur, db_connection)
 	return response
 
-def PutQuestion(position_id, questionObject):
-
+def reorderQuestions(position_id, questionObject):
 	currentPosition = getQuestion(position_id)
 	# Si je déplace la question vers le haut
 	if(int(position_id) > questionObject.position):
@@ -235,6 +234,7 @@ def PutQuestion(position_id, questionObject):
 		#Je place la question et les réponses au bon emplacement
 		updatePositionQuestion(0, questionObject)
 		updatePositionAnswer(0, questionObject)
+		return True
 
 	#Si je déplace la question vers le bas
 	elif(int(position_id) < questionObject.position):
@@ -251,9 +251,30 @@ def PutQuestion(position_id, questionObject):
 		#Je place la question et les réponses au bon emplacement
 		updatePositionQuestion(0, questionObject)
 		updatePositionAnswer(0, questionObject)
-	#Si je ne déplace pas la question
-	elif(int(position_id) == questionObject.position):
-		return updateCompleteQuestion(position_id, questionObject)
+		return True
+
+
+def PutQuestion(position_id, questionObject):
+
+	#Connexion à la base de données
+	cur, db_connection = connectdb()
+
+	#Formatage des valeurs
+	title = questionObject.title.replace("'", "\'")
+	text = questionObject.text.replace("'", "\'")
+	position = questionObject.position
+	image = questionObject.image.replace("'", "\'")
+
+	#Requete de modification des questions en base de données
+	update_result = cur.execute(
+		f'update question SET position = "{position}", text = "{text}", title = "{title}", image = "{image}" where position = "{position_id}"'
+	)
+
+	#Exécution de la requete
+	execdb(db_connection)
+
+	closeCursor(cur, db_connection)
+	return True
 
 def updatePositionQuestionTo0(position_id):
 	#Connexion à la base de données
@@ -339,9 +360,26 @@ def updateCompleteQuestion(position_id, questionObject):
 	closeCursor(cur, db_connection)
 	return True
 
-def PutAnswer(answerObject):
-	#Question sont supprimés avant l'ajout en base
-	insertAnswer(answerObject)
+def PutAnswer(answerObject, answerId):
+	 
+	#Connexion à la base de données
+	cur, db_connection = connectdb()
+
+	#Formatage des valeurs
+	isCorrect = answerObject.isCorrect
+	text = answerObject.text.replace("'", "\'")
+	question_position = answerObject.question
+
+	#Requete de modification des questions en base de données
+	update_result = cur.execute(
+		f'update answer SET question_position = "{question_position}", text = "{text}", is_correct = "{isCorrect}" where answer_id = "{answerId}"'
+	)
+
+	#Exécution de la requete
+	execdb(db_connection)
+
+	closeCursor(cur, db_connection)
+	return True
 	
 	
 def getAnswer(position):

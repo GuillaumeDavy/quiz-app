@@ -14,14 +14,15 @@ def Delete(position):
 def Get():
     return db_utils.getQuestions()
 
-def Put(question_json, position=0):
+def Put(question_json, position):
+
     #Delete des questions avant la réinsertion <-- mieux de le mettre dans db_utils 
-    pos = position if position != 0 else question_json['position']
 
-
-    db_utils.deleteAnswer(pos)
-
+    answers = db_utils.getAnswer(position)
     #Réinsertion
+    i = 0
     for answer in question_json['possibleAnswers']:
-        answer_obj = a.Answer(answer['isCorrect'], answer['text'], pos)
-        db_utils.PutAnswer(answer_obj)
+        idAnswer = answers[i][0]
+        answer_obj = a.Answer(answer['isCorrect'], answer['text'], position)
+        db_utils.PutAnswer(answer_obj, idAnswer)
+        i=i+1

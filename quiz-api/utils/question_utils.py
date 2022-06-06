@@ -66,14 +66,18 @@ def Put(position, question_json):
 	
 	quest = q.Question(question_json['title'], question_json['text'], question_json['position'], question_json['image'], [])
 
-	#Put des questions
-	db_utils.PutQuestion(position, quest)
+	#Reordering des questions si la question a changé de position
+	if int(question_json["position"]) != int(position):
+		reorderQuestions(position, quest)
+		
+	#Put des questions et des réponses
+	db_utils.PutQuestion(quest.position, quest)
+	ans.Put(question_json, quest.position)
 
-	#Si la modification ne comporte pas de changement de position <-- BUG dans le cas ou il y a changement de position + de contenu
-	if(int(position) == int(question_json["position"])):
-		#Put des Answers
-		ans.Put(question_json, position)
+	return True
 
+def reorderQuestions(position, question):
+	db_utils.reorderQuestions(position, question)
 	return True
 
 def GetAll():
