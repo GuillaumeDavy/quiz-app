@@ -55,26 +55,26 @@ def deleteAnswer(position):
 	decrementAnswer(position)
 	
 
-def incrementQuestionLessThanPosition(position):
+def incrementQuestionLessThanPosition(position, question_position):
     #Connexion à la base de données
     cur, db_connection = connectdb()
 
     #Requete de modification des questions en base de données
     increment_question = cur.execute(
-        f"update question set position = position + 1 where position < {position} AND position > 0")
+        f"update question set position = position + 1 where position < {position} AND position >= {question_position} AND position > 0")
 
     #Exécution de la requete
     execdb(db_connection)
 
     closeCursor(cur, db_connection)
 
-def decrementQuestionLessThanPosition(position):
+def decrementQuestionLessThanPosition(position, question_position):
     #Connexion à la base de données
     cur, db_connection = connectdb()
 
     #Requete de modification des questions en base de données
     increment_question = cur.execute(
-        f"update question set position = position - 1 where position > {position}")
+        f"update question set position = position - 1 where position > {position} AND position <= {question_position}")
 
     #Exécution de la requete
     execdb(db_connection)
@@ -94,26 +94,26 @@ def decrementQuestion(position):
 
     closeCursor(cur, db_connection)
 
-def incrementAnswerLessThanPosition(position):
+def incrementAnswerLessThanPosition(position, answer_position):
     #Connexion à la base de données
     cur, db_connection = connectdb()
 
     #Requete de modification des questions en base de données
     increment_answer = cur.execute(
-        f"update answer set question_position = question_position + 1 where question_position < {position} AND question_position > 0")
+        f"update answer set question_position = question_position + 1 where question_position < {position} AND question_position >= {answer_position} AND question_position > 0")
 
     #Exécution de la requete
     execdb(db_connection)
 
     closeCursor(cur, db_connection)
 
-def decrementAnswerLessThanPosition(position):
+def decrementAnswerLessThanPosition(position, answer_position):
     #Connexion à la base de données
     cur, db_connection = connectdb()
 
     #Requete de modification des questions en base de données
     increment_answer = cur.execute(
-        f"update answer set question_position = question_position - 1 where question_position > {position}")
+        f"update answer set question_position = question_position - 1 where question_position > {position} AND question_position <= {answer_position}")
 
     #Exécution de la requete
     execdb(db_connection)
@@ -218,7 +218,6 @@ def countQuestions():
 	return response
 
 def reorderQuestions(position_id, questionObject):
-	currentPosition = getQuestion(position_id)
 	# Si je déplace la question vers le haut
 	if(int(position_id) > questionObject.position):
 		#Je met à 0 la question et les answers que je souhaite déplacer
@@ -226,10 +225,10 @@ def reorderQuestions(position_id, questionObject):
 		updatePositionAnswerTo0(position_id)
 		
 		#J'incrémente les questions inférieures à celle que je déplace
-		incrementQuestionLessThanPosition(position_id)
+		incrementQuestionLessThanPosition(position_id, questionObject.position)
 		
 		#J'incrémente les réponses inférieures à celle que je déplace
-		incrementAnswerLessThanPosition(position_id)
+		incrementAnswerLessThanPosition(position_id, questionObject.position)
 
 		#Je place la question et les réponses au bon emplacement
 		updatePositionQuestion(0, questionObject)
@@ -243,10 +242,10 @@ def reorderQuestions(position_id, questionObject):
 		updatePositionAnswerTo0(position_id)
 		
 		#Je décrémente les questions supérieurs à celle que je déplace
-		decrementQuestionLessThanPosition(position_id)
+		decrementQuestionLessThanPosition(position_id, questionObject.position)
 		
 		#J'incrémente les réponses supérieurs à celle que je déplace
-		decrementAnswerLessThanPosition(position_id)
+		decrementAnswerLessThanPosition(position_id, questionObject.position)
 
 		#Je place la question et les réponses au bon emplacement
 		updatePositionQuestion(0, questionObject)
@@ -255,7 +254,7 @@ def reorderQuestions(position_id, questionObject):
 
 
 def PutQuestion(position_id, questionObject):
-
+	
 	#Connexion à la base de données
 	cur, db_connection = connectdb()
 
