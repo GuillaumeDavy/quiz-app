@@ -3,6 +3,8 @@ import { RouterLink, RouterView } from 'vue-router'
 </script>
 
 <template>
+<div class="app-wrapper">
+
   <header>
     <div class="wrapper">
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -23,6 +25,7 @@ import { RouterLink, RouterView } from 'vue-router'
       </nav>
     </div>
   </header>
+      </div>
 
   <RouterView />
 </template>
@@ -30,5 +33,14 @@ import { RouterLink, RouterView } from 'vue-router'
 <style>
 @import '@/assets/base.css';
 
+.app-wrapper{
+  width: 100vw;
+  height: 100vh;
+  background-image: url('@/assets/bg-4.jpg');
+    -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  }
 
 </style>

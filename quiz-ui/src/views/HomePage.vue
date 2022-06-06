@@ -1,7 +1,9 @@
 <template>
-  <div class="container-bg container mt-5">
-    <div class="center text-center">
-      <h1>Quiz-App</h1>
+  <div class="wrapper">
+
+    <div class="container-bg container mt-5">
+      <div class="center text-center">
+        <h1>Quiz-App</h1>
       <div class="mt-5">
         <h4>JOUDIOUX Alexandre</h4>
         <h4>JOUEN Matthias</h4>
@@ -13,6 +15,7 @@
       </div>
     </div>
   </div>
+        </div>
 </template>
 
 <script>
@@ -35,10 +38,13 @@ export default {
 </script>
 
 <style scoped>
+
+
 .center{
   margin: auto;
   width: 100%;
 }
+
 
 .container-bg{
   background-color: #3a3a3a;
