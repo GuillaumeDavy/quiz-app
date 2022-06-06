@@ -7,6 +7,8 @@ import AdminManager from '../views/AdminManager.vue'
 import LoginPage from '../views/LoginPage.vue'
 import localStorageService from '../services/LocalStorageService'
 import quizApiService from '../Services/QuizApiService'
+import EditQuestionManager from '../views/EditQuestionManager.vue'
+import AddQuestionManager from '../views/AddQuestionManager.vue'
 
 const router = createRouter({
     history: createWebHistory(
@@ -40,6 +42,16 @@ const router = createRouter({
             path: '/login',
             name: 'LoginPage',
             component: LoginPage
+        },
+        {
+            path: '/edit-question',
+            name: 'EditQuestion',
+            component: EditQuestionManager
+        },
+        {
+            path: '/question/add',
+            name: 'AddQuestion',
+            component: AddQuestionManager
         }
     ]
 })

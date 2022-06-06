@@ -1,5 +1,5 @@
 <template>
-<div class="container-bg container mt-5">
+<div class="container-bg container mt-5 bg-dark text-light">
     <div class="center text-center">
       <h1 class="px-4">Nouvelle partie</h1>
       <div class="p-4 ">

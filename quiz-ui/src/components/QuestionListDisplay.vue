@@ -1,10 +1,6 @@
 <template>
-  <button class="btn btn-primary my-2" @click="addQuestion()">Add Question</button>
-  <QuestionModal :question="null"
-    v-show="displayEmptyModal"
-    @close="displayEmptyModal = false"
-  />
-  <table class="table table-bordered">
+  <button class="btn btn-primary my-2" @click="addQuestion()">Ajouter une question</button>
+  <table class="table table-bordered text-light text-center">
     <thead>
       <tr>
         <th scope="col">Position</th>
@@ -21,33 +17,25 @@
         <td>{{ question.text }}</td>
         <td><img v-if="question.image" :src="question.image" width="300" height="200"/></td>
         <td>
-          <button class="btn btn-primary" @click="editQuestion(question);$emit('edit')">Edit</button>
+          <button class="btn btn-primary" @click="editQuestion(question.position)">Edit</button>
           <button class="btn btn-danger" @click="deleteQuestion(question.position)">Delete</button>
         </td>
       </tr>
     </tbody>
   </table>
-  <QuestionModal :question=wantedQuestion
-    v-show="displayQuestionModal"
-    @close="displayQuestionModal = false"
-  />
 </template>
 
 <script>
-import QuestionModal from '../components/QuestionModal.vue';
 import quizApiService from '../services/quizApiService';
+import router from '../router';
 export default {
   name: "QuestionListDisplay",
   data() {
     return {
-      wantedQuestion : null,
       questionList : [],
-      displayEmptyModal : false,
-      displayQuestionModal : false,
     };
   },
   components: {
-    QuestionModal
   },
   methods: {
     getAllQuestions() {
@@ -60,17 +48,23 @@ export default {
         });
     },
     deleteQuestion(position) {
-      quizApiService.deleteQuestion(position)
+      quizApiService.deleteQuestion(position, localStorage.getItem('token'))
         .then(() => {
           this.getAllQuestions();
         });
     },
     addQuestion() {
-      this.displayEmptyModal = true;
+      router.push('/question/add');
     },
-    editQuestion(question) {
-      this.wantedQuestion = question;
-      this.displayQuestionModal = true;
+    editQuestion(questionPosition) {
+      router.push(
+        {
+          path: '/edit-question/',
+          query: {
+            id: questionPosition
+          }
+        }
+      );
     },
   },
   async created() {

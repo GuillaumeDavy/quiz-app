@@ -1,7 +1,9 @@
 <template>
-  <div class="container">
-    <h1>ADMIN PAGE</h1>
-    <QuestionListDisplay/>
+  <div class="container-xl container mt-5 bg-dark text-light">
+    <div class="container">
+      <h1>ADMIN PAGE</h1>
+      <QuestionListDisplay/>
+    </div>
   </div>
 </template>
 

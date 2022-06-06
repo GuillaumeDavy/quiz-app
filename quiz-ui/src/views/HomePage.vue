@@ -1,16 +1,20 @@
 <template>
   <div class="wrapper">
 
-    <div class="container-bg container mt-5">
+    <div class="container-bg container mt-5 bg-dark text-light">
       <div class="center text-center">
         <h1>Quiz-App</h1>
       <div class="mt-5">
         <h4>JOUDIOUX Alexandre</h4>
         <h4>JOUEN Matthias</h4>
         <h4>DAVY Guillaume</h4>
-        <div v-for="scoreEntry in registeredScores" v-bind:key="scoreEntry.date">
+        <div v-if="registeredScores.scores.length > 0" class="leaderboard">
+          <p>Leaderboard</p>
+          <div v-for="scoreEntry in registeredScores.scores" v-bind:key="scoreEntry.date">
           {{ scoreEntry.playerName }} - {{ scoreEntry.score }}
+          </div>
         </div>
+        
         <router-link to="/start-new-quiz-page" class="btn btn-danger">Démarrer le quiz !</router-link>
       </div>
     </div>
@@ -31,8 +35,9 @@ export default {
   async created() {
     quizApiService.getQuizInfo().then(response => {
       this.registeredScores = response.data;
+      console.log(this.registeredScores.scores);
     });
-		console.log("Composant Home page 'created'");
+		
   }
 };
 </script>

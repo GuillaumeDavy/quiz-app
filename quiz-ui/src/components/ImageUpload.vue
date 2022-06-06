@@ -6,7 +6,7 @@
     :disabled="isSaving"
     @change="fileChange"
     accept="image/jpeg, image/png, image/gif"
-    class="input-file"
+    class="input-file form-control"
     ref="fileInput"
   />
   <a class="image-upload-remove-link" 

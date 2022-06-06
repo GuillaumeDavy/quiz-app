@@ -53,5 +53,14 @@ export default {
         return this.call("post", `check-token`, {
             token: token
         });
+    },
+    updateQuestion(question, questionPosition) {
+        return this.call("put", `questions/${questionPosition}`, question);
+    },
+    deleteQuestion(questionPosition, token) {
+        return this.call("delete", `questions/${questionPosition}`, null, token);
+    },
+    addQuestion(question, token) {
+        return this.call("post", `questions`, question, token);
     }
 };

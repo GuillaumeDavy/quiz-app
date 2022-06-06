@@ -4,10 +4,10 @@ import { RouterLink, RouterView } from 'vue-router'
 
 <template>
 <div class="app-wrapper">
-
+<img class="bg-image" src="@/assets/bg-4.jpg" alt="BG">
   <header>
     <div class="wrapper">
-      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-2">
         <span class="navbar-brand">Quiz-App</span>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -33,14 +33,13 @@ import { RouterLink, RouterView } from 'vue-router'
 <style>
 @import '@/assets/base.css';
 
-.app-wrapper{
-  width: 100vw;
-  height: 100vh;
-  background-image: url('@/assets/bg-4.jpg');
-    -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
+.bg-image{
+  width: 100%;
+  height: 100%;
   background-size: cover;
-  }
+  background-position: center;
+  background-repeat: no-repeat;
+  position: fixed;
+}
 
 </style>

@@ -1,4 +1,5 @@
 <template>
+<div class="container-bg container mt-5 bg-dark text-light">
   <h1>LOGIN PAGE</h1>
   <div class="form-group">
       <label for="exampleInputEmail1" >Saisissez le mot de passe</label>
@@ -6,6 +7,7 @@
       <div class="alert alert-danger" v-if="error">{{ error }}</div>
     </div>
     <button v-on:click="login" class="btn btn-outline-danger mt-1">Se connecter</button>
+</div>
 </template>
 
 <script>
