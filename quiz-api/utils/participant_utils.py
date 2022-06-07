@@ -1,8 +1,4 @@
-from asyncio.windows_events import NULL
-from contextlib import nullcontext
 import json
-from queue import Empty
-from types import SimpleNamespace
 from model import question as q
 from model import quizInfo as qi
 from model import scores as s
@@ -11,12 +7,22 @@ from model import answersSummaries as ansSum
 from utils import db_utils
 from utils import answer_utils as ans
 
-def Get():
+"""
+	Description:
+		Retrouve les scores des participants
+	Sortie :	
+		Retourne un JSON contenant les scores des participants
+"""
+def GetQuizInfo():
 	#On récupère le nombre de question total
 	questionsNumber = db_utils.countQuestions()
+
 	# On récupère tous les participants
 	participants = db_utils.getAllParticipants()
+
+	#On crée un objet quizInfo
 	quizInfo = qi.quizInfo(questionsNumber[0][0], [])
+
 	temp = []
 	for participant in participants:
 		i=1
@@ -28,24 +34,29 @@ def Get():
 			participantJsonAnswer.append(participantAnswer[2])
 		for userAnswers in participantJsonAnswer:
 			answers = db_utils.getAnswer(i)
-
+			# Si le participant à répondu à la question correctement, on ajoute 1 au score
 			if(answers[int(userAnswers)-1][2] == "True"):
 				score = score + 1
 			i=i+1
+		#On ajoute le score du participant à la liste des scores
 		temp.append(s.scores(participant[1], score))
 
+	#On trie la liste des scores par ordre décroissant
 	scores = sorted(temp, key=lambda s: s.score, reverse=True)
 	for score in scores:
 		quizInfo.scores.append(s.scores(score.playerName, score.score))
 
-
-
-
 	return json.dumps(quizInfo, indent=4, cls=qi.quizInfoEncoder)
 
-def takeSecond(elem):
-    return elem[1]
 
+"""
+	Description:
+		Retrouve le score du participant
+	Entrée:
+		participant au format JSON
+	Sortie :	
+		Retourne un JSON contenant les scores du participant
+"""
 def GetParticipant(participant_json):
 	i=1
 	score = 0
@@ -69,8 +80,15 @@ def GetParticipant(participant_json):
 	return json.dumps(finalJson)
 		
 
-	
-def Post(participant_json):
+"""
+	Description:
+		Ajoute une participation en base de données
+	Entrée:
+		participant au format JSON
+	Sortie :	
+		200 si la participation a été ajoutée, 405 si la participation n'est pas complète, 406 si la participation est trop longue
+"""
+def PostParticipations(participant_json):
 	questionNumber = db_utils.countQuestions()
 	if(len(participant_json["answers"]) < questionNumber[0][0]):
 		return 405
@@ -84,9 +102,25 @@ def Post(participant_json):
 		db_utils.insertParticipantAnswer(idLastParticipant, answer)
 	return 200
 
-def Delete():
+"""
+	Description:
+		Supprime toutes les participations
+"""
+def DeleteParticipations():
 	db_utils.deleteAllParticipantsAndAnswers()
 	return True
+
+def GetAnswers(position):
+	return db_utils.getAnswer(position)
+
+"""
+	NON utilisé
+
+	Description:
+		Retrouve le score des participants
+	Sortie :	
+		Retourne un JSON contenant les scores du participant
+"""
 
 def displayParticipantsInfos():
 	participantsToReturn = []
@@ -120,10 +154,8 @@ def displayParticipantsInfos():
 			i=i+1
 		test = p.Participant(participant[1], score, answersSummaries)
 		participantsToReturn.append(json.loads(json.dumps(test, indent=4, cls=p.ParticipantEncoder)))
-		# return json.dumps(test, indent=4, cls=p.ParticipantEncoder)
 		json_string = json.dumps(participantsToReturn, default=obj_dict)
 
-	# participantJSONData = json.dumps(participantsToReturn, indent=4, cls=p.ParticipantEncoder)
 	return json_string
 
 def obj_dict(obj):
