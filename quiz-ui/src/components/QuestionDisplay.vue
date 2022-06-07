@@ -40,8 +40,9 @@ export default {
 }
 
 .question-button{
-  background-color: black;
+  background-color: rgb(138, 69, 165);
   color: white;
+  text-size-adjust: auto;
   min-width: 100%;
   max-width: 100%;
   min-height: 90px;
@@ -56,7 +57,7 @@ export default {
 }
 
 .question-button:hover{
-  background-color:orange;
+  background-color:rgb(68, 181, 216);
   color: rgb(0, 0, 0);
 }
 </style>

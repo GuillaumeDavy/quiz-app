@@ -66,10 +66,12 @@ export default {
         }
       );
     },
+    
   },
   async created() {
     this.getAllQuestions();
 		console.log("Question List Display");
   }
 };
+
 </script>

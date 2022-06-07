@@ -1,7 +1,9 @@
 <template>
-<p>score : {{ score }}</p>
-<div v-for="(participation, index) in leaderBoard">
-  <p>{{ index+1 }} : {{ participation.playerName }} / {{ participation.score }}</p>
+<div class="container-xl container mt-5 bg-dark text-light p-3 rounded-2">
+  <div v-for="(participation, index) in leaderBoard">
+    <p v-if="participation.playerName === currentPlayerName" class="fs-4">Vous : {{ participation.playerName }}</p>
+    <p v-else>{{ index+1 }} : {{ participation.playerName }} / {{ participation.score }}</p>
+  </div>
 </div>
 </template>
 
@@ -12,19 +14,19 @@ export default {
   name: "ScorePage",
   data() {
     return {
-      playerName : '',
-      leaderBoard : [],
-      playerScore : 0
+      currentPlayerName : '',
+      leaderBoard : {},
+      playerScore : 0,
     };
   },
   async created() {
-    this.playerName = localStorageService.getPlayerName();
+    this.currentPlayerName = localStorageService.getPlayerName();
     this.playerScore = localStorageService.getParticipationScore();
     quizApiService.getQuizInfo().then(response => {
       console.log(response);
       this.leaderBoard = response.data.scores;
     });
-		console.log("Score Page of" + this.playerName + " / his score is :" + this.playerScore);
+		console.log("Score Page of " + this.currentPlayerName + " / his score is :" + this.playerScore);
   }
 };
 </script>

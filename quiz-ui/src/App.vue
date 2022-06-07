@@ -28,6 +28,11 @@ import { RouterLink, RouterView } from 'vue-router'
       </div>
 
   <RouterView />
+  <footer class="bg-dark">
+    Made by <a href="https://github.com/GuillaumeDavy" target="_blank">@GuillaumeDavy</a>
+     / <a href="https://github.com/Vitrox77" target="_blank">@AlexandreJoudioux</a>
+      / <a href="https://github.com/MatthiasJouen" target="_blank">@MatthiasJouen</a>
+  </footer>
 </template>
 
 <style>
@@ -40,6 +45,20 @@ import { RouterLink, RouterView } from 'vue-router'
   background-position: center;
   background-repeat: no-repeat;
   position: fixed;
+}
+
+footer {
+  padding: 1% 5%;
+  text-align:center;
+  color: white;
+  bottom : 0;
+  position: absolute;
+  width: 100%;
+}
+footer a {
+  color: #FE4B74;
+  font-weight: 500;
+  text-decoration: none;
 }
 
 </style>
