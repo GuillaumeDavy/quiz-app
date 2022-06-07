@@ -1,5 +1,6 @@
 <template>
   <button class="btn btn-primary my-3" @click="addQuestion()"> <b class="h5">+</b> Ajouter une question</button>
+  <button class="btn btn-warning my-3 float-end" @click="deleteParticipations()"> <b class="h5"></b>Supprimer les participations</button>
   <table class="table table-bordered text-light text-center">
     <thead>
       <tr>
@@ -58,6 +59,12 @@ export default {
   components: {
   },
   methods: {
+    deleteParticipations(){
+      var token = localStorage.getItem('token');
+      quizApiService.deleteParticipations(token).then(() => {
+        console.log('participations deleted');
+      });
+    },
     getAllQuestions() {
       quizApiService.getQuestions()
         .then(response => {

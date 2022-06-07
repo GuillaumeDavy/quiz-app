@@ -1,6 +1,6 @@
 <template>
 <div class="container-bg container mt-5 bg-dark text-light">
-  <h1>LOGIN PAGE</h1>
+  <h1 class="page-title">LOGIN PAGE</h1>
   <div class="form-group">
       <label for="exampleInputEmail1" >Saisissez le mot de passe</label>
       <input type="password" v-model="password" placeholder="Password" class="form-control"/>
