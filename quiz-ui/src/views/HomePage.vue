@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
 
-    <div class="container-xl container mt-5 bg-dark text-light p-3 rounded-2">
+    <div class="container-xl container my-5 bg-dark text-light p-3 rounded-2">
       <div class="center text-center">
         <div class="stage">
           <div class="layer"></div>
@@ -26,26 +26,7 @@
           <div class="layer"></div>
         </div>
       <div class="mt-5">
-        <div v-if="registeredScores.scores.length > 0" class="leaderboard px-4 justify-content-center">
-          <i class="d-inline fa fa-trophy fa-3x" aria-hidden="true"></i><p class="d-inline text-uppercase fs-2"> Leaderboard </p><i class="d-inline fa fa-trophy fa-3x" aria-hidden="true"></i>
-          <table class="table table-hover table-responsive  text-center">
-            <thead>
-              <tr class="">
-                <th class="table-light col-4">Position</th>
-                <th class="table-light col-4">Nom du joueur</th>
-                <th class="table-light col-4">Score</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(scoreEntry, index) in registeredScores.scores" v-bind:key="scoreEntry.date">
-                <td class="table-light">{{ index+1 }}</td>
-                <td class="table-light text-center">{{ scoreEntry.playerName }}</td>
-                <td class="table-light">{{ scoreEntry.score }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        
+        <Leaderboard v-if="displayLeaderboard" :registeredScores="registeredScores.scores"></Leaderboard>
         <router-link to="/start-new-quiz-page" class="btn btn-danger">Démarrer le quiz !</router-link>
       </div>
     </div>
@@ -55,27 +36,34 @@
 
 <script>
 import quizApiService from "@/services/quizApiService";
-
+import Leaderboard from "../components/Leaderboard.vue";
 export default {
   name: "HomePage",
   data() {
     return {
       registeredScores :[],
+      displayLeaderboard: false,
     };
   },
   async created() {
     quizApiService.getQuizInfo().then(response => {
       this.registeredScores = response.data;
       console.log(this.registeredScores.scores);
+      if (this.registeredScores.scores.length > 0) {
+        this.displayLeaderboard = true;
+      }
     });
 		
-  }
+  },
+  components: {
+    Leaderboard
+  },
 };
 
 </script>
 
 <style scoped>
-@import url("//fonts.googleapis.com/css?family=Pacifico&text=Quiz-App");
+@import url("//fonts.googleapis.com/css?family=Pacifico");
 
 .center{
   margin: auto;

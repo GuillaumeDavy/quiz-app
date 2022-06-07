@@ -1,8 +1,9 @@
 <template>
-<div class="container-xl container mt-5 bg-dark text-light p-3 rounded-2">
-  <div v-for="(participation, index) in leaderBoard">
-    <p v-if="participation.playerName === currentPlayerName" class="fs-4">Vous : {{ participation.playerName }}</p>
-    <p v-else>{{ index+1 }} : {{ participation.playerName }} / {{ participation.score }}</p>
+<div class="container-xl container mt-5 bg-dark text-light p-3 rounded-2 text-center h3">
+  <h1 class="page-title">Résultat du Quiz !</h1>
+  <Leaderboard :registeredScores="leaderBoard"></Leaderboard>
+  <div class="d-flex justify-content-center">
+    <router-link to="/start-new-quiz-page" class="btn btn-danger">Nouvelle partie</router-link>
   </div>
 </div>
 </template>
@@ -10,6 +11,8 @@
 <script>
 import quizApiService from '../services/quizApiService';
 import localStorageService from '../services/LocalStorageService';
+import Leaderboard from "../components/Leaderboard.vue";
+
 export default {
   name: "ScorePage",
   data() {
@@ -18,6 +21,9 @@ export default {
       leaderBoard : {},
       playerScore : 0,
     };
+  },
+  components: {
+    Leaderboard
   },
   async created() {
     this.currentPlayerName = localStorageService.getPlayerName();
@@ -32,4 +38,8 @@ export default {
 </script>
 
 <style scoped>
+
+
+
+
 </style>

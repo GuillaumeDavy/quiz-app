@@ -1,5 +1,5 @@
 <template>
-  <div class="container-bg container mt-5 bg-dark text-light">
+  <div class="container-bg container mt-2 bg-dark text-light">
     <div class="center text-center">
       <h1>Question {{ currentQuestionPosition }} / {{ totalNumberOfQuestion }}</h1>
       <QuestionDisplay :question="currentQuestion" @answer-selected="answerClickedHandler" />
@@ -32,11 +32,12 @@ export default {
       console.log("Answer clicked: " + answerId);
       this.playerAnswers.push(answerId);
       console.log(this.playerAnswers);
-      this.currentQuestionPosition++;
-      if(this.currentQuestionPosition <= this.totalNumberOfQuestion){
+      if(this.currentQuestionPosition < this.totalNumberOfQuestion){
+        this.currentQuestionPosition++;
         this.loadQuestionByPosition(this.currentQuestionPosition);
       }
       else{
+        this.currentQuestionPosition = this.totalNumberOfQuestion
         this.endQuiz()
       }
     }, 

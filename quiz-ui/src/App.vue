@@ -8,7 +8,7 @@ import { RouterLink, RouterView } from 'vue-router'
   <header>
     <div class="wrapper">
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-2">
-        <span class="navbar-brand">Quiz-App</span>
+        <span class="navbar-brand navbar-title">Quiz-App</span>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -21,6 +21,12 @@ import { RouterLink, RouterView } from 'vue-router'
               <RouterLink to="/admin" class="nav-link">Administration</RouterLink>
             </li>
           </ul>
+          <div class="float-right contributors">
+             Made by <a href="https://github.com/GuillaumeDavy" target="_blank">@GuillaumeDavy</a>
+     / <a href="https://github.com/Vitrox77" target="_blank">@AlexandreJoudioux</a>
+      / <a href="https://github.com/MatthiasJouen" target="_blank">@MatthiasJouen</a>
+          </div>
+
         </div>
       </nav>
     </div>
@@ -29,9 +35,7 @@ import { RouterLink, RouterView } from 'vue-router'
 
   <RouterView />
   <footer class="bg-dark">
-    Made by <a href="https://github.com/GuillaumeDavy" target="_blank">@GuillaumeDavy</a>
-     / <a href="https://github.com/Vitrox77" target="_blank">@AlexandreJoudioux</a>
-      / <a href="https://github.com/MatthiasJouen" target="_blank">@MatthiasJouen</a>
+   
   </footer>
 </template>
 
@@ -47,18 +51,23 @@ import { RouterLink, RouterView } from 'vue-router'
   position: fixed;
 }
 
-footer {
-  padding: 1% 5%;
+.contributors {
   text-align:center;
   color: white;
-  bottom : 0;
-  position: absolute;
-  width: 100%;
+  margin-left: auto;
 }
-footer a {
+.contributors a {
   color: #FE4B74;
   font-weight: 500;
   text-decoration: none;
+}
+
+.navbar-title {
+	text-transform: uppercase;
+	background: linear-gradient(to right, #0077ff 0%, #e40cc7 100%);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+  font-size: 30px;
 }
 
 </style>

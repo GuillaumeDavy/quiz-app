@@ -1,6 +1,6 @@
 <template>
   <div class="container-xl container mt-5 bg-dark text-light">
-    <div class="container">
+    <div class="container p-4 rounded">
       <h1>ADMIN PAGE</h1>
       <QuestionListDisplay/>
     </div>

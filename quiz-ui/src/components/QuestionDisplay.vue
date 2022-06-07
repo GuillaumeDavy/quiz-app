@@ -2,8 +2,8 @@
   <div class="my-2">
     {{ question.text }}
   </div>
-  <img v-if="question.image" :src="question.image" height="300" width="400" />
-  <div class="row question-container mt-4">
+  <img v-if="question.image" :src="question.image" height="250" width="350" />
+  <div class="row question-container mt-2">
 
     <div class="col-6 p-2" v-for="(answer, index) in question.possibleAnswers">
     

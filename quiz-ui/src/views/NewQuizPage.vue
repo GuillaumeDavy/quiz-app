@@ -56,7 +56,7 @@ export default {
   padding: 20px;
   border-radius: 5px;
   /* add border shadow to this element */
-  box-shadow: 0px 0px 20px 1px;
+  box-shadow: 0px 0px 10px 1px;
 
 }
 

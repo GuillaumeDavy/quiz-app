@@ -3,7 +3,7 @@ from model import question as q
 from model import answer as a
 from utils import db_utils
 from utils import answer_utils as ans
-
+from utils import participant_utils as pa
 """
 	Description:
 		Ajoute une question en base de données
@@ -21,6 +21,8 @@ def PostQuestion(question_json):
 	#Insertion des réponses dans la base de données
 	ans.PostAnswer(question_json)
 	
+	# Supprime les participations du quizz car une question à été ajoutée.
+	pa.DeleteParticipations()
 
 
 """
@@ -40,6 +42,8 @@ def DeleteQuestion(position):
 	# Supprime les réponses associées à la question
 	db_utils.deleteAnswer(position)
 	
+	# Supprime les participations du quizz car une question à été supprimée.
+	pa.DeleteParticipations()
 	return True
 
 

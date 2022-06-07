@@ -1,5 +1,7 @@
 <template>
-  <div class="container-xl container mt-5 bg-dark text-light p-3 rounded-2">
+  <div class="container-xl container bg-dark text-light rounded-2 py-5 p-4 my-4 ">
+    <!-- button retour -->
+    <button class="btn btn-danger" @click="ReturnToAdmin">Retour</button>
     <div class="form">
       <div class="form-group">
         <label for="title">Titre de la question</label>
@@ -10,12 +12,16 @@
         <input type="number" class="form-control" id="position" placeholder="Position de la question" v-model="form.position"> 
         <label for="image">Image de la question</label>
         <ImageUpload @file-change="imageFileChangedHandler" />
-        <img v-if="form.image" :src="form.image" height="300" width="400" /><br>
+        <img v-if="form.image" :src="form.image" height="200" width="300" /><br>
 
         <label for="questionAnswers">Réponses de la question</label> 
-        <div v-for="(answer, index) in form.possibleAnswers">
-          <input type="text" class="form-control" id="questionAnswers" placeholder="Ici la réponse" v-model="answer.text">
-          <input type="radio" name="checkboxAnswerCorrect" v-model="correctAnswer" :value="index">
+        <div v-for="(answer, index) in form.possibleAnswers" class="col-12 row p-2">
+          <div class="col-10">
+            <input type="text" class="form-control" id="questionAnswers" placeholder="Ici la réponse" v-model="answer.text">
+          </div>
+          <div class="col-2 pt-2">
+            <input type="radio" name="checkboxAnswerCorrect" v-model="correctAnswer" :value="index"> Vrai
+            </div>
         </div>
       </div>
     </div>
@@ -71,6 +77,9 @@ export default {
     
   },
   methods:{
+    ReturnToAdmin() {
+      router.push('/admin');
+    },
     imageFileChangedHandler(b64String) {
       this.form.image = b64String;
     },
